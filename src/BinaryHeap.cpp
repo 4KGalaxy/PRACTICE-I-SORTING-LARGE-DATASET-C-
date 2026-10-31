@@ -1,6 +1,6 @@
 #include "BinaryHeap.hpp"
 
-#include <utility>  // std::move, std::swap
+#include <utility>  
 
 BinaryHeap::BinaryHeap(std::vector<std::string>&& datosEntrada)
     : datos(std::move(datosEntrada)), n(datos.size()) {}

@@ -16,7 +16,7 @@
 //
 // Truco para que HeapSort sea "in-place" (sin memoria extra):
 //   el vector se divide en dos zonas
-//        [ 0 ........ tamaño-1 ][ tamaño ........ fin ]
+//        [ 0 ........ tamanio-1 ][ tamanio ........ fin ]
 //        <---- zona del heap ---><---- zona ya ordenada --->
 //   Cada vez que se extrae el maximo, este se manda al inicio de la zona
 //   ordenada y la zona del heap se achica en 1. Al final todo el vector queda
