@@ -8,7 +8,8 @@
 
 ## 1. Descripción
 
-[REDACTAR: qué hace el programa en 2 o 3 líneas. Ordena 100.000 palabras con tres estrategias (QuickSort sobre vector, HeapSort con Binary Heap y árbol AVL con recorrido inorden) y compara tiempo, memoria y complejidad.]
+Se desarrolla un programa en C++ capaz de ordenar un gran conjunto de datos de palabras (Una colección de 100 000 palabras en inglés) utilizando tres estrategias algorítmicas diferentes: QuickSort, HeapSort y AVLTree, cada una basada en estructuras de datos distintas.
+El objetivo de esta práctica es analizar cómo se comportan los diferentes algoritmos y estructuras al trabajar con grandes volúmenes de datos.
 
 ---
 
@@ -83,13 +84,40 @@ Ejecutar en Windows con `.\sorting.exe` (en Linux/Mac: `./sorting`).
 
 ### 5.1 QuickSort (Sara)
 
-[REDACTAR con tus palabras. Puntos a cubrir:]
+### 5.1 QuickSort (Sara)
 
-- Implementado desde cero sobre `std::vector<std::string>`, sin `std::sort`.
-- Partición de Lomuto, basada en un ejemplo de [COMPLETAR: fuente/enlace del código de inspiración], adaptado de `int` a `string`.
-- Pivote: el elemento central del rango, que se intercambia con el último antes de particionar. Evita el peor caso O(n²) con datos ya ordenados (como `words_alpha.txt`).
-- Ordena *in place*: modifica el vector original.
-- Estructura: `quickSort` (función pública) → `quickSortRecursivo` → `particion`.
+QuickSort se implementó desde cero sobre un `std::vector<std::string>`, sin usar
+`std::sort` ni otras funciones de ordenamiento de la librería estándar. Las palabras
+se comparan alfabéticamente con los operadores `<` y `<=`, que en C++ funcionan
+directamente con `string`.
+
+La partición está basada en el esquema de Lomuto, tomando como punto de partida el
+ejemplo de GeeksforGeeks que ordenaba números enteros ([C++ Program for Quick Sort](https://www.geeksforgeeks.org/cpp/cpp-program-for-quicksort/)) únicamente usado como 
+inspiración después de investigar diferentes formas de implementación de QuickSort.
+
+**Elección del pivote.** Antes de cada partición se toma el elemento del medio del
+rango y se intercambia con el último. Esto evita el peor caso, O(n²), que ocurre
+cuando los datos ya vienen ordenados y el pivote es siempre el mayor. Con este cambio,
+el pivote parte el rango justo a la mitad.
+
+**Ordenamiento in place.** La función recibe el vector por referencia y lo ordena
+directamente, sin crear otro vector. La única memoria adicional es la de la pila de
+llamadas recursivas.
+
+**Estructura del código.** Se dividió en tres funciones:
+
+- `quickSort(palabras)`: es la única función pública (declarada en `QuickSort.hpp`).
+  Revisa que el vector no esté vacío y arranca la recursión con todo el rango.
+- `quickSortRecursivo(palabras, low, high)`: ubica el pivote y se llama a sí misma
+  sobre el lado izquierdo y el lado derecho. Su caso base es cuando el rango tiene
+  0 o 1 elementos.
+- `particion(palabras, low, high)`: elige el pivote central, deja las palabras menores
+  o iguales a su izquierda y las mayores a su derecha, y retorna la posición final
+  del pivote.
+
+**Pruebas.**
+
+[COMPLETAR cuando el main esté terminado]
 
 ### 5.2 HeapSort con Binary Heap (Simon)
 
