@@ -5,7 +5,7 @@ using namespace std;
 
 int particion(vector<string> &palabras, int low, int high)
 {
-    // Se usa el elemento de la mitad porque es una buena práctica para evitar el peor caso en listas ya ordenadas o casi ordenadas. Esto ayuda a mejorar el rendimiento promedio del algoritmo QuickSort.
+    // uso del elemento de la mitad ya que es buena práctica para evitar el peor caso en listas ya ordenadas o casi ordenadas. Ayuda a mejorar el rendimiento promedio del algoritmo
     int medio = (low + high) / 2;
     swap(palabras[medio], palabras[high]);
 
@@ -27,9 +27,6 @@ int particion(vector<string> &palabras, int low, int high)
 
 void quickSortRecursivo(vector<string> &palabras, int low, int high)
 {
-    // Caso base: si low no es menor que high, el rango tiene 0 o 1 elementos,
-    // ya está ordenado y no es necesario hacer nada más.
-    // Si no, se ubica el pivote y se ordenan recursivamente los lados izquierdo y derecho.
     if (low < high)
     {
         int posPivote = particion(palabras, low, high);
@@ -40,7 +37,6 @@ void quickSortRecursivo(vector<string> &palabras, int low, int high)
 
 void quickSort(vector<string> &palabras)
 {
-    // Se debe de revisar el vector vacio porque si no, se puede caer en un error de segmentación al intentar acceder a elementos que no existen.
     if (palabras.empty())
     {
         return;
