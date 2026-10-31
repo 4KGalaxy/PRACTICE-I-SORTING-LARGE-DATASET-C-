@@ -9,13 +9,12 @@ std::size_t BinaryHeap::tamanio() const { return n; }
 
 bool BinaryHeap::vacio() const { return n == 0; }
 
-// ---------------------------------------------------------------------------
+
 // hundir (sift-down)
 // Compara el elemento i con sus dos hijos. Si algun hijo es mayor, intercambia
 // con el MAYOR de los dos y sigue bajando. Se detiene cuando el elemento ya es
 // mayor o igual que sus hijos, o cuando no tiene hijos.
 // Es iterativo (sin recursion) para no gastar pila: O(log n).
-// ---------------------------------------------------------------------------
 void BinaryHeap::hundir(std::size_t i) {
     while (true) {
         std::size_t izq = 2 * i + 1;
@@ -34,14 +33,14 @@ void BinaryHeap::hundir(std::size_t i) {
     }
 }
 
-// ---------------------------------------------------------------------------
+
 // construir (heapify de Floyd)
 // Las hojas ya son heaps validos de tamanio 1, asi que solo hace falta hundir
 // los nodos internos, de abajo hacia arriba. El ultimo nodo interno es el
 // padre del ultimo elemento: (n/2 - 1).
 // Parece O(n log n) pero la suma real es O(n), porque la mayoria de nodos
 // estan cerca de las hojas y bajan muy poco.
-// ---------------------------------------------------------------------------
+
 void BinaryHeap::construir() {
     n = datos.size();
     if (n < 2) return;
@@ -52,13 +51,13 @@ void BinaryHeap::construir() {
     }
 }
 
-// ---------------------------------------------------------------------------
+
 // extraerMaximo
 // 1. El maximo esta siempre en la raiz (posicion 0).
 // 2. Se intercambia con el ultimo elemento del heap (posicion n-1): el maximo
 //    queda en su lugar definitivo de la zona ordenada.
 // 3. El heap se achica en 1 y el elemento que llego a la raiz se hunde.
-// ---------------------------------------------------------------------------
+
 void BinaryHeap::extraerMaximo() {
     if (n == 0) return;
 
