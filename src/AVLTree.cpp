@@ -1,6 +1,6 @@
 #include "AVLTree.hpp"
 
-#include <algorithm>  // std::max
+#include <algorithm>  
 
 AVLTree::AVLTree() : raiz(nullptr), nodos(0), letras(0) {}
 
@@ -13,8 +13,6 @@ void AVLTree::liberar(Nodo* n) {
     liberar(n->der);
     delete n;
 }
-
-
 // Alturas y factor de balance
 
 int AVLTree::alturaDe(const Nodo* n) { return n ? n->altura : 0; }
@@ -30,16 +28,6 @@ int AVLTree::factorBalance(const Nodo* n) {
 void AVLTree::actualizarAltura(Nodo* n) {
     n->altura = 1 + std::max(alturaDe(n->izq), alturaDe(n->der));
 }
-
-
-// Rotacion simple a la DERECHA (caso Izquierda-Izquierda)
-/*
-         y                x
-        / \              / \
-       x   C    ==>     A   y
-      / \                  / \
-     A   B                B   C
-*/
 // El inorden NO cambia (A x B y C), solo cambia la forma del arbol.
 // Se actualiza primero 'y' (quedo mas abajo) y luego 'x'.
 
@@ -54,17 +42,7 @@ Nodo* AVLTree::rotarDerecha(Nodo* y) {
     actualizarAltura(x);
     return x;  // nueva raiz de este subarbol
 }
-
-
 // Rotacion simple a la IZQUIERDA (caso Derecha-Derecha): espejo de la anterior
-/*
-       x                    y
-      / \                  / \
-     A   y      ==>       x   C
-        / \              / \
-       B   C            A   B
-*/
-
 Nodo* AVLTree::rotarIzquierda(Nodo* x) {
     Nodo* y = x->der;
     Nodo* B = y->izq;
@@ -85,10 +63,8 @@ Nodo* AVLTree::rotarIzquierda(Nodo* x) {
 //   Izq-Der : rotacion doble  (izquierda al hijo, luego derecha al nodo)
 //   Der-Der : rotacion simple izquierda
 //   Der-Izq : rotacion doble  (derecha al hijo, luego izquierda al nodo)
-// El caso se decide con el factor del HIJO pesado (y no comparando la
-// palabra), asi funciona bien aunque haya palabras repetidas.
-// Despues de la insercion, a lo sumo UNA rotacion (simple o doble) arregla
-// todo el arbol.
+// El caso se decide con el factor del HIJO pesado (y no comparando la  palabra), asi funciona bien aunque haya palabras repetidas.
+// Despues de la insercion, a lo sumo UNA rotacion (simple o doble) arregla todo el arbol
 
 Nodo* AVLTree::balancear(Nodo* n) {
     actualizarAltura(n);
