@@ -22,9 +22,9 @@ struct Nodo {
 };
 
 
-// AVLTree: arbol binario de busqueda AUTO-BALANCEADO.
+// AVLTree: arbol binario de busqueda 
 // Invariante AVL: en cada nodo, |altura(izq) - altura(der)| <= 1.
-// Gracias a eso la altura es siempre O(log n) (maximo ~1.44 * log2(n)),
+// Gracias a eso la altura es siempre O(log n) 
 // y cada insercion cuesta O(log n) incluso en el peor caso.
 // Las palabras repetidas SE CONSERVAN (van al hijo derecho), asi la salida
 // siempre tiene el mismo tamanio que la entrada.
@@ -38,8 +38,8 @@ public:
 
     void insertar(const std::string& palabra);   // O(log n)
 
-    // Recorrido inorden (izq, nodo, der): entrega las palabras en orden
-    // alfabetico. O(n).
+    // Recorrido inorden (izq, nodo, der): entrega las palabras en orden alfabetico. O(n).
+    
     std::vector<std::string> inorden() const;
 
     std::size_t cantidadNodos() const;
@@ -56,7 +56,7 @@ private:
     std::size_t nodos;       // cuantos nodos hay
     std::size_t letras;      // suma de la longitud de todas las palabras
 
-    // ---- auxiliares recursivos (la profundidad es O(log n), no hay riesgo) ----
+    // auxiliares recursivos (la profundidad es O(log n), no hay riesgo) 
     static int alturaDe(const Nodo* n);
     static int factorBalance(const Nodo* n);
     static void actualizarAltura(Nodo* n);
