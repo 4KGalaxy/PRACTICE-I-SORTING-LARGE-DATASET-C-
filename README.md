@@ -43,13 +43,17 @@ El objetivo de esta práctica es analizar cómo se comportan los diferentes algo
 | DatasetGenerator | Sara | Genera `dataset.txt` a partir de `words_alpha.txt` |
 | BinaryHeap / HeapSort | Simon | Heap binario máximo propio y HeapSort in-place sobre `vector<string>` |
 | AVLTree | Simon | Árbol AVL propio con rotaciones; inserta las palabras y devuelve el recorrido inorden |
-| main (menú) | Antuan | [COMPLETAR] |
+| main (menú) | Antuan | Implementa un menu que reune cada funcionalidad en el main |
 
 ---
 
 ## 3. Compilación y ejecución
 
-Desde la carpeta raíz del proyecto:
+Se manejan las siguientes opciones
+
+1.Se puede ejecutar presionando F5 (Gracias a la implementacion de los archivos .json)
+
+2.Desde la carpeta raíz del proyecto:
 
 ```
 g++ -std=c++17 -O2 -Iinclude src/*.cpp -o sorting
@@ -60,7 +64,27 @@ Ejecutar en Windows con `.\sorting.exe` (en Linux/Mac: `./sorting`).
 - El programa debe ejecutarse desde la carpeta raíz, porque usa rutas relativas como `data/dataset.txt`.
 - Todas las mediciones se hicieron compilando con `-O2`.
 
-[COMPLETAR – Antuan: cómo se usa el menú (opciones de archivo y de algoritmo).]
+[ Antuan: cómo se usa el menú (opciones de archivo y de algoritmo).]
+
+## Modo de Uso del Menú Interactivo
+
+El programa cuenta con un menú en consola que permite seleccionar el dataset a procesar y evaluar los algoritmos de ordenamiento de forma individual o comparativa.
+
+### Paso 1: Selección del Archivo de Entrada
+Al ejecutar el programa, se desplegará el primer menú para cargar el conjunto de datos:
+1. **Opción 1 (`dataset.txt`)**: Carga el dataset principal de 100,000 palabras aleatorizadas. Si el archivo no existe en la carpeta `data/`, el programa lo generará automáticamente.
+2. **Opción 2 (`dataset_profe.txt`)**: Carga el archivo de prueba suministrado por el docente.
+3. **Opción 3 (`words_alpha.txt`)**: Carga el diccionario original completo de palabras en inglés.
+4. **Opción 4 (Generar nuevo dataset)**: Genera desde cero un nuevo archivo `dataset.txt` tomando 100,000 palabras aleatorias de `words_alpha.txt`.
+
+### Paso 2: Selección del Algoritmo de Ordenamiento
+Una vez cargado el archivo, se desplegará el menú principal de operaciones:
+* **Opción 1 (QuickSort)**: Ejecuta el algoritmo QuickSort sobre un `std::vector<std::string>` contiguo en memoria, mide el tiempo exacto en milisegundos y calcula el consumo aproximado en RAM.
+* **Opción 2 (HeapSort)**: Construye la estructura de Binary Heap y ejecuta el ordenamiento in-place sobre la lista de palabras.
+* **Opción 3 (AVL Tree)**: Realiza la inserción nodo por nodo en el árbol AVL balanceado, ejecuta el recorrido inorden para obtener la secuencia ordenada y calcula la memoria consumida por los nodos y punteros.
+* **Opción 4 (Prueba completa)**: Corre de forma secuencial las tres estrategias sobre el mismo archivo de datos cargado para realizar la comparación directa de tiempos y memoria.
+* **Opción 5 (Cambiar archivo / Regenerar)**: Permite alternar a otro archivo de la carpeta `data/` o generar un nuevo orden aleatorio sin necesidad de reiniciar el programa.
+* **Opción 0 (Salir)**: Libera los recursos y finaliza la ejecución.
 
 ---
 
