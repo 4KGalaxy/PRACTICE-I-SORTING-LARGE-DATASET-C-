@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Ejecutar en Consola Externa",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/programa",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "preLaunchTask": "build"
+    }
+  ]
+}
