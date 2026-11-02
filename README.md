@@ -392,12 +392,15 @@ Para ordenar una sola vez 100.000 palabras en orden aleatorio, QuickSort sobre u
 fue el enfoque más apropiado: fue el más rápido en todas las pruebas, usó la menor memoria
 y su implementación es la más sencilla, y su peor caso O(n²) se evitó eligiendo el pivote
 central. La práctica también mostró que la complejidad teórica no basta para elegir un
-algoritmo: los tres son O(n log n), pero la forma en que cada estructura usa la memoria y
+algoritmo: los tres son $O(n \log n)$, pero la forma en que cada estructura usa la memoria y
 la cantidad de comparaciones marcaron diferencias de casi el doble en el tiempo real.
 
 ### Simon Lopez Mesa
 
-[COMPLETAR]
+Hacerr HeapSort y el árbol AVL desde cero me mostró que dos algoritmos con la misma complejidad, pueden comportarse distinto en la práctica. En nuestras pruebas HeapSort fue el más lento aunque ordena sobre el propio vector y no necesita memoria adicional. El AVL fue más rápido pero a cambio usó alrededor de un 58 % más de memoria: 6,24 MB frente a 3,95 MB, solo en nodos y sin contar el vector del resultado.
+
+Para ordenar una sola vez 100.000 palabras, el algoritmo más apropiado fue QuickSort: el más rápido y junto con HeapSort, el de menor memoria. Aun así, HeapSort y el AVL tienen algo que QuickSort no garantiza: $O(n \log n)$ también en el peor caso, algo que el problema de los valores repetidos dejó muy claro. El algoritmo HeapSort es mejor si importan la memoria y el peor caso, y el AVL si además de ordenar se necesita insertar y buscar después.
+Algo a destacar es que en mis pruebas individuales Heapsort y AVL qeudaron empatados en los tiempos, lo que sugiere que la diferencia entre los dos depende del hardware.
 
 ### Antuan Alejandro Navarro Ortiz
 
