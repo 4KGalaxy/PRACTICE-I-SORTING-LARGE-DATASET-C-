@@ -18,21 +18,21 @@ El objetivo de esta práctica es analizar cómo se comportan los diferentes algo
 ```
 ├── README.md
 ├── .gitignore
+├── .vscode/                   ← tasks.json y launch.json (compilar y ejecutar con F5 en VS Code)
 ├── data/
 │   ├── words_alpha.txt        ← fuente original (~370.000 palabras, ordenadas)
 │   ├── dataset_profe.txt      ← archivo entregado por el profesor (100.000 palabras)
 │   └── dataset.txt            ← generado por DatasetGenerator (100.000 palabras aleatorias)
 ├── include/                   ← declaraciones (.hpp)
-├── src/                       ← implementaciones (.cpp)
-│   ├── main.cpp
-│   ├── QuickSort.cpp
-│   ├── BinaryHeap.cpp
-│   ├── HeapSort.cpp
-│   ├── AVLTree.cpp
-│   ├── DatasetGenerator.cpp
-│   ├── Metrics.cpp
-│   └── Utils.cpp
-└── output/                    ← listas ordenadas generadas por el programa
+└── src/                       ← implementaciones (.cpp)
+    ├── main.cpp
+    ├── QuickSort.cpp
+    ├── BinaryHeap.cpp
+    ├── HeapSort.cpp
+    ├── AVLTree.cpp
+    ├── DatasetGenerator.cpp
+    ├── Metrics.cpp
+    └── Utils.cpp
 ```
 
 | Módulo | Responsable | Qué hace |
@@ -56,15 +56,18 @@ Se manejan las siguientes opciones
 2.Desde la carpeta raíz del proyecto:
 
 ```
-g++ -std=c++17 -O2 -Iinclude src/*.cpp -o sorting
+g++ -std=c++17 -O2 -Iinclude src/*.cpp -o programa
 ```
 
-Ejecutar en Windows con `.\sorting.exe` (en Linux/Mac: `./sorting`).
+Ejecutar en Windows con `.\programa.exe` (en Linux/Mac: `./programa`).
 
 - El programa debe ejecutarse desde la carpeta raíz, porque usa rutas relativas como `data/dataset.txt`.
 - Todas las mediciones se hicieron compilando con `-O2`.
-
-[ Antuan: cómo se usa el menú (opciones de archivo y de algoritmo).]
+- Los tiempos reportados se tomaron compilando con
+  `g++ -std=c++17 -O2 -Iinclude src/*.cpp -o programa`. El `tasks.json` incluido en el
+  repositorio (el que usa F5) compila con `-std=c++11 -g` y sin optimización, por lo que
+  los tiempos obtenidos con él serán mayores. F5 además requiere tener instalado el
+  depurador gdb y configurada su ruta en `launch.json`.
 
 ## Modo de Uso del Menú Interactivo
 
@@ -96,7 +99,11 @@ Una vez cargado el archivo, se desplegará el menú principal de operaciones:
 | `dataset_profe.txt` | 100.000 palabras desordenadas | Entregado por el profesor |
 | `dataset.txt` | 100.000 palabras aleatorias | Generado por `DatasetGenerator` a partir de `words_alpha.txt` |
 
-**Generación de `dataset.txt`:** [REDACTAR: se leen todas las palabras de `words_alpha.txt`, se barajan con `shuffle` (generador `mt19937` con semilla de `random_device`) y se conservan las primeras 100.000.]
+**Generación de `dataset.txt`:** la función `generarDataset` lee las 370.105 palabras de
+`words_alpha.txt` con `leerPalabras`, las baraja con `shuffle` usando el generador
+`mt19937` con una semilla tomada de `random_device`, conserva las primeras 100.000 con
+`resize` y las escribe en `dataset.txt` con `escribirPalabras`. Como la lista quedó
+barajada, esas 100.000 palabras son aleatorias y además quedan desordenadas.
 
 - Cada ejecución del generador produce un dataset distinto. El `dataset.txt` del repositorio quedó fijo para que los tres algoritmos se midan con los mismos datos. **No se recomienda regenerar.**
 
@@ -140,7 +147,11 @@ llamadas recursivas.
 
 **Pruebas.**
 
-[COMPLETAR cuando el main esté terminado]
+Primero se probó con listas pequeñas: una desordenada, una ya ordenada y una ordenada
+al revés, para comprobar que el pivote central funcionara con datos ordenados. Después
+se probó desde el menú con `dataset.txt` y `dataset_profe.txt` (100.000 palabras cada
+uno). En todos los casos la función `estaOrdenado` confirmó que el resultado quedó
+ordenado. Los tiempos y la memoria se reportan en la sección 7.
 
 ### 5.2 HeapSort con Binary Heap (Simon)
 
@@ -228,28 +239,62 @@ Es una estimación del **árbol**. Mientras `avlOrdenar` construye la lista inor
 **Tiempo:**
 - Se usa `std::chrono::steady_clock` (clase `Cronometro`).
 - El cronómetro mide **solo el ordenamiento**: la lectura del archivo y la conversión a minúscula quedan por fuera.
-- En HeapSort el cronómetro rodea `heapSort`. En el AVL rodea `avlOrdenar`, que incluye insertar las palabras, el recorrido inorden y la liberación del árbol. HeapSort y AVL se midieron con 5 corridas y se reporta el mínimo (promedio entre paréntesis).
+- En HeapSort el cronómetro rodea `heapSort`. En el AVL rodea `avlOrdenar`, que incluye insertar las palabras, el recorrido inorden y la liberación del árbol.
+- Cada algoritmo se ejecutó 5 veces con cada archivo (`dataset.txt` y `dataset_profe.txt`).
+  Se reportan las 5 corridas y el promedio. Todas las mediciones se hicieron en el mismo
+  equipo y con la misma compilación (ver sección 7).
 
 **Memoria:**
 - Estimación con `sizeof`: `n × sizeof(std::string)` + total de letras (función `memoriaPalabras`).
 - Es una aproximación por encima: en g++, las palabras de 15 letras o menos guardan sus letras dentro del mismo `string` (32 bytes).
 - Para el AVL no se usa `memoriaPalabras`: se calcula `nodos × sizeof(Nodo) + letras` (56 bytes por nodo). Cubre el árbol, pero no el vector donde se guarda el resultado del inorden.
+- Como la memoria es una estimación calculada a partir de los datos (no una medición en
+  tiempo de ejecución), da el mismo valor en todas las corridas.
 
 ---
 
 ## 7. Resultados
 
-| Algoritmo | Archivo | Palabras | Tiempo (ms) | Memoria (MB) |
-|---|---|---|---|---|
-| QuickSort | `dataset.txt` | 100.000 | [COMPLETAR] | [COMPLETAR] |
-| QuickSort | `dataset_profe.txt` | 100.000 | 25.51 | 3.95 |
-| QuickSort | `words_alpha.txt` (ordenado) | 370.105 | 50.46 | 14.63 |
-| HeapSort | `dataset.txt` | 100.000 | 81,69 (prom. 106,07) | 3,95 |
-| HeapSort | `dataset_profe.txt` | 100.000 | 74,02 (prom. 81,39) | 3,95 |
-| AVL | `dataset.txt` | 100.000 | 76,39 (prom. 89,06) | 6,24 |
-| AVL | `dataset_profe.txt` | 100.000 | 75,86 (prom. 81,54) | 6,24 |
+### Equipo de pruebas
 
-[COMPLETAR: los tiempos de QuickSort de esta tabla son de una sola ejecución; reemplazarlos por el promedio si se decide hacer varias.]
+| Componente | Detalle |
+|---|---|
+| Equipo | Lenovo Legion |
+| Procesador | AMD Ryzen 7 260 |
+| Memoria RAM | 32 GB |
+| Tarjeta gráfica | NVIDIA GeForce RTX 5060 (no interviene: los algoritmos se ejecutan en el procesador) |
+| Sistema operativo | Windows 11 |
+| Compilador | g++ 16.1.0 (MSYS2 UCRT64), `-std=c++17 -O2` |
+
+### Tiempo con `dataset_profe.txt` (100.000 palabras)
+
+| Corrida | QuickSort (ms) | HeapSort (ms) | AVL (ms) |
+|---|---|---|---|
+| 1 | 26,00 | 48,94 | 37,84 |
+| 2 | 26,37 | 41,65 | 34,20 |
+| 3 | 24,68 | 45,33 | 33,40 |
+| 4 | 24,95 | 53,35 | 37,77 |
+| 5 | 26,58 | 42,10 | 36,88 |
+| **Promedio** | **25,72** | **46,27** | **36,02** |
+
+### Tiempo con `dataset.txt` (100.000 palabras, generado)
+
+| Corrida | QuickSort (ms) | HeapSort (ms) | AVL (ms) |
+|---|---|---|---|
+| 1 | 26,70 | 59,66 | 35,08 |
+| 2 | 26,68 | 51,09 | 41,11 |
+| 3 | 26,70 | 48,47 | 36,30 |
+| 4 | 27,64 | 46,68 | 44,21 |
+| 5 | 26,57 | 48,85 | 35,14 |
+| **Promedio** | **26,86** | **50,95** | **38,37** |
+
+### Memoria estimada (igual para ambos archivos)
+
+| Algoritmo | Memoria estimada | Observación |
+|---|---|---|
+| QuickSort | 3,95 MB | Ordena dentro del mismo vector (más la pila de recursión, O(log n)) |
+| HeapSort | 3,95 MB | Ordena dentro del mismo vector (O(1) adicional) |
+| AVL | 6,24 MB | Solo el árbol. Al construir la lista inorden también existe el vector resultado (3,95 MB), así que el consumo adicional máximo ronda los 10,19 MB |
 
 ---
 
@@ -265,17 +310,46 @@ Es una estimación del **árbol**. Mientras `avlOrdenar` construye la lista inor
 
 ### 8.2 ¿Qué algoritmo tuvo mejor rendimiento?
 
-[COMPLETAR cuando estén los tres resultados.]
+**QuickSort** fue el más rápido con ambos archivos (25,72 ms y 26,86 ms en promedio),
+seguido por el **AVL** (36,02 ms y 38,37 ms) y por último **HeapSort** (46,27 ms y
+50,95 ms). HeapSort tardó entre 1,8 y 1,9 veces más que QuickSort, y el AVL alrededor de
+1,4 veces más.
+
+En memoria, QuickSort y HeapSort empatan con la menor estimación (3,95 MB), porque ambos
+ordenan dentro del mismo vector. El AVL es el que más usa: 6,24 MB solo en nodos, más el
+vector donde guarda el resultado.
+
+Los resultados con los dos archivos son muy parecidos, lo cual tiene sentido: ambos tienen
+100.000 palabras en orden aleatorio.
 
 ### 8.3 ¿Por qué la teoría difiere de la práctica?
 
-[REDACTAR. Dato para usar:]
-- `words_alpha.txt` tiene 3,7 veces más palabras que `dataset_profe.txt`. Según O(n log n) se esperaba ~4 veces más tiempo, pero QuickSort tardó solo ~2 veces más (50.46 ms vs 25.51 ms). Con datos ordenados, el pivote central parte cada rango justo a la mitad y el patrón de comparaciones es predecible para el procesador.
-- HeapSort y AVL son ambos O(n log n) y quedaron prácticamente empatados (entre 74 y 82 ms con 100.000 palabras) aunque sus estructuras son muy distintas. La notación O ignora las constantes y el acceso a memoria. Una explicación probable es que el AVL hace 100.000 reservas con `new` y recorre punteros dispersos, lo que aprovecha mal la caché, mientras que el heap trabaja sobre un arreglo contiguo. No se midió con un profiler, por lo que es una hipótesis.
+Los tres algoritmos son O(n log n) en el caso promedio y, aun así, HeapSort tardó casi el
+doble que QuickSort. La notación O describe cómo crece el tiempo cuando crece n, pero
+ignora las constantes y la forma en que cada algoritmo accede a la memoria.
+
+- **QuickSort** recorre el vector de forma secuencial durante la partición. El procesador
+  lee la memoria en bloques, así que los datos siguientes ya están en caché cuando se
+  necesitan.
+- **HeapSort** salta de la posición `i` a `2i+1` o `2i+2`, cada vez más lejos en el
+  arreglo, y en cada nivel de `hundir` compara la palabra con **dos** hijos y hace un
+  intercambio.
+- **AVL** fue más rápido que HeapSort a pesar de trabajar con punteros dispersos y de hacer
+  100.000 reservas con `new`, que en teoría aprovechan peor la caché. Una explicación
+  probable es la cantidad de comparaciones: al insertar, el AVL compara una vez por nivel
+  (altura de 20 con 100.000 palabras), mientras que HeapSort compara dos veces por nivel en
+  cada una de las n extracciones. Como comparar palabras es la operación más costosa aquí,
+  hacer menos comparaciones compensa el peor acceso a memoria. No se midió con un
+  profiler, por lo que es una hipótesis.
 
 ### 8.4 Ventajas y desventajas de cada estructura
 
-- **QuickSort / vector:** [REDACTAR: rápido en la práctica y sin vector adicional; peor caso O(n²); no es estable; se degenera con muchos valores repetidos.]
+- **QuickSort / vector:** fue el más rápido en la práctica y ordena dentro del mismo
+  vector, sin estructura adicional (solo la pila de recursión, O(log n) en promedio).
+  Como el vector es memoria contigua, aprovecha bien la caché del procesador. Su
+  desventaja es el peor caso O(n²): el pivote central lo evita con datos ordenados, pero
+  no lo elimina en teoría. Además no es estable y, con la partición de Lomuto, se degenera
+  cuando hay muchos valores repetidos (ver sección 9.1).
 - **HeapSort / Binary Heap:** ordena in-place (memoria adicional O(1)) y garantiza O(n log n) en todos los casos, sin degradarse con datos repetidos u ordenados. Por otro lado, no es estable, accede a la memoria de forma poco favorable para la caché (salta entre padres e hijos) y solo sirve para ordenar.
 - **AVL:** garantiza O(n log n) gracias al balanceo (altura 20 con 100.000 palabras) y el árbol queda disponible para insertar y buscar en O(log n). Por otro lado, usa más memoria (nodo de 56 bytes por palabra, alrededor de un 58 % más que HeapSort), hace 100.000 reservas dinámicas con punteros dispersos y requiere más código (rotaciones).
 
@@ -285,27 +359,55 @@ Es una estimación del **árbol**. Mientras `avlOrdenar` construye la lista inor
 
 ### 9.1 Codificación UTF-16 de `dataset_profe.txt`
 
-[REDACTAR. Puntos a cubrir:]
-- Al leer el archivo, el programa contaba 199.999 palabras en vez de 100.000.
-- El archivo venía en UTF-16; cada salto de línea dejaba un carácter nulo que se leía como una "palabra" extra, todas iguales.
-- Esas ~100.000 palabras repetidas hacían que la partición de Lomuto se degenerara y el programa se cerraba por desbordamiento de la pila de recursión.
-- Solución: convertir el archivo a UTF-8.
-- Lección: QuickSort con Lomuto es vulnerable a datos con muchos valores repetidos.
+Al probar QuickSort con `dataset_profe.txt`, el programa reportaba 199.999 palabras en
+lugar de 100.000 y se cerraba sin mostrar ningún error durante el ordenamiento.
 
-### 9.2 Variación entre corridas (Simon)
-- En la primera corrida de HeapSort sobre `dataset.txt` el tiempo fue de 185 ms, mientras que las siguientes estuvieron entre 82 y 90 ms (arranque en frío: caché y memoria todavía sin calentar). Por eso se repitió cada algoritmo 5 veces y se reporta el mínimo, con el promedio entre paréntesis.
+La causa era la codificación: el archivo venía en UTF-16, donde cada carácter ocupa dos
+bytes. `leerPalabras` lee el archivo byte por byte, así que en cada salto de línea quedaba
+un carácter nulo suelto que se contaba como una palabra más. Esas 99.999 "palabras" eran
+todas iguales, y con tantos valores repetidos la partición de Lomuto deja casi todo del
+mismo lado del pivote: la recursión se volvió tan profunda que el programa se cerró por
+desbordamiento de la pila.
+
+Se solucionó convirtiendo el archivo a UTF-8 desde VS Code; las palabras no cambian, solo
+la forma en que se guardan. Este error mostró en la práctica una debilidad de QuickSort
+con Lomuto: su rendimiento se degrada cuando hay muchos valores repetidos.
+
+### 9.2 Variación entre corridas
+
+Los tiempos cambiaron de una corrida a otra aunque los datos fueran los mismos. Por
+ejemplo, la primera corrida de HeapSort con `dataset.txt` tardó 59,66 ms, mientras que las
+siguientes estuvieron entre 46,68 y 51,09 ms; y una corrida del AVL llegó a 44,21 ms cuando
+las demás estuvieron entre 35,08 y 41,11 ms. Estas diferencias se deben a factores externos
+al algoritmo, como otros procesos del sistema y el estado de la caché. Por eso cada
+algoritmo se ejecutó 5 veces y se reporta el promedio.
 
 ---
 
 ## 10. Conclusiones
 
-[COMPLETAR entre todos: qué enfoque es el más apropiado para este problema y por qué.]
+Para el problema planteado, ordenar una sola vez 100.000 palabras en orden aleatorio,
+**QuickSort sobre un vector es el enfoque más apropiado**: fue el más rápido en todas las
+pruebas, usa la menor memoria y su implementación es la más sencilla. Su peor caso O(n²)
+se mitigó eligiendo el pivote central, y no se presentó con ninguno de los dos archivos.
+
+**HeapSort** sería la mejor opción si se necesitara una garantía de O(n log n) en cualquier
+caso con memoria adicional mínima, aunque en la práctica fue el más lento por su forma de
+acceder a la memoria.
+
+**El AVL** no conviene si solo se quiere ordenar una vez, porque usa bastante más memoria
+que los otros dos. Su ventaja aparece cuando los datos deben mantenerse ordenados mientras
+se insertan o buscan palabras de forma continua, ya que cada operación cuesta O(log n).
+
+En general, la práctica mostró que la complejidad teórica no basta para elegir un
+algoritmo: con la misma complejidad, la forma en que cada estructura usa la memoria y la
+cantidad de comparaciones marcaron diferencias de casi el doble en el tiempo real.
 
 ---
 
 ## 11. Fuentes
 
 - Lista de palabras: [dwyl/english-words](https://github.com/dwyl/english-words)
-- Inspiración para la partición de QuickSort: [COMPLETAR: enlace]
+- Inspiración para la partición de QuickSort: [GeeksforGeeks – C++ Program for Quick Sort](https://www.geeksforgeeks.org/cpp/cpp-program-for-quicksort/)
 - [Repositorio del profesor](https://github.com/carlosalvarezh/EstructuraDatosAlgoritmos1).
 - Notas de clase, [videos instructivos en Youtube](https://www.youtube.com/watch?v=MkHuwIrWZmI).
