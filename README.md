@@ -386,23 +386,22 @@ algoritmo se ejecutó 5 veces y se reporta el promedio.
 
 ## 10. Conclusiones
 
-Para el problema planteado, ordenar una sola vez 100.000 palabras en orden aleatorio,
-**QuickSort sobre un vector es el enfoque más apropiado**: fue el más rápido en todas las
-pruebas, usa la menor memoria y su implementación es la más sencilla. Su peor caso O(n²)
-se mitigó eligiendo el pivote central, y no se presentó con ninguno de los dos archivos.
+### Sara Castaño Suárez
 
-**HeapSort** sería la mejor opción si se necesitara una garantía de O(n log n) en cualquier
-caso con memoria adicional mínima, aunque en la práctica fue el más lento por su forma de
-acceder a la memoria.
+Para ordenar una sola vez 100.000 palabras en orden aleatorio, QuickSort sobre un vector
+fue el enfoque más apropiado: fue el más rápido en todas las pruebas, usó la menor memoria
+y su implementación es la más sencilla, y su peor caso O(n²) se evitó eligiendo el pivote
+central. La práctica también mostró que la complejidad teórica no basta para elegir un
+algoritmo: los tres son O(n log n), pero la forma en que cada estructura usa la memoria y
+la cantidad de comparaciones marcaron diferencias de casi el doble en el tiempo real.
 
-**El AVL** no conviene si solo se quiere ordenar una vez, porque usa bastante más memoria
-que los otros dos. Su ventaja aparece cuando los datos deben mantenerse ordenados mientras
-se insertan o buscan palabras de forma continua, ya que cada operación cuesta O(log n).
+### Simon Lopez Mesa
 
-En general, la práctica mostró que la complejidad teórica no basta para elegir un
-algoritmo: con la misma complejidad, la forma en que cada estructura usa la memoria y la
-cantidad de comparaciones marcaron diferencias de casi el doble en el tiempo real.
+[COMPLETAR]
 
+### Antuan Alejandro Navarro Ortiz
+
+[COMPLETAR]
 ---
 
 ## 11. Fuentes
