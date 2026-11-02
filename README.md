@@ -401,7 +401,8 @@ la cantidad de comparaciones marcaron diferencias de casi el doble en el tiempo 
 
 ### Antuan Alejandro Navarro Ortiz
 
-[COMPLETAR]
+En esta práctica implementé un sistema modular en C++ con menú interactivo por consola y ejecutable en terminal externa que compara QuickSort (std::vector), HeapSort (Binary Heap) y Árbol AVL (inserción + inorden) sobre 100,000 palabras de distintos archivos (dataset.txt, dataset_profe.txt, words_alpha.txt). En las pruebas, QuickSort fue el más veloz por la localidad de referencia en caché del vector contiguo; HeapSort igualó su bajo consumo de RAM al ser in-place pero fue más lento por los cache misses al navegar el heap; y el Árbol AVL logró tiempos competitivos pero consumió ~60% más memoria por el sobrecosto de punteros y alturas en sus nodos, demostrando el impacto real de la gestión de memoria en hardware más allá de la complejidad $O(n \log n)$ teórica.
+
 ---
 
 ## 11. Fuentes
